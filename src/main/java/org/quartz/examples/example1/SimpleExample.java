@@ -29,6 +29,8 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import tool.DateTool;
+
 import java.util.Date;
 
 /**
@@ -51,8 +53,10 @@ public class SimpleExample {
 		log.info("------- Initialization Complete -----------");
 
 		// computer a time that is on the next round minute
-		Date runTime = evenMinuteDate(new Date());
-
+		int second = 10;
+		Date runTime    = DateTool.getCalendarDate(new Date(), "SECOND", second);
+//		Date runTime = evenMinuteDate(new Date());
+		
 		log.info("------- Scheduling Job  -------------------");
 
 		// define the job and tie it to our HelloJob class
@@ -63,7 +67,7 @@ public class SimpleExample {
 
 		// Tell quartz to schedule the job using our trigger
 		sched.scheduleJob(job, trigger);
-		log.info(job.getKey() + " will run at: " + runTime);
+		log.info(job.getKey() + " will run at: " + DateTool.getDateStrByFormat(runTime, DateTool.DATE_TIME_MASK));
 
 		// Start up the scheduler (nothing can actually run until the
 		// scheduler has been started)
@@ -73,14 +77,14 @@ public class SimpleExample {
 
 		// wait long enough so that the scheduler as an opportunity to
 		// run the job!
-//		log.info("------- Waiting 65 seconds... -------------");
-//		try {
-//			// wait 65 seconds to show job
-//			Thread.sleep(65L * 1000L);
-//			// executing...
-//		} catch (Exception e) {
-//			//
-//		}
+		log.info("------- Waiting "+second+" seconds... -------------");
+		try {
+			// wait xx seconds to show job
+			Thread.sleep(second * 1000L);
+			// executing...
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		// shut down the scheduler
 		log.info("------- Shutting Down ---------------------");
